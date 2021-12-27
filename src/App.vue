@@ -1,26 +1,42 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="q-pa-md row justify-center q-gutter-md">
+    <news-card-vue
+      v-for="(article, index) in articles"
+      :key="index"
+      :article="article"
+    />
+    
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from "axios";
+import NewsCardVue from "./components/NewsCard.vue";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    // HelloWorld
+    NewsCardVue,
+  },
+  data() {
+    return {
+      data: "aref",
+      info: null,
+      articles: [],
+    };
+  },
+  mounted() {
+    let config = {
+      headers: {
+        "x-api-key": "07265249548748a686491cba77761458",
+      },
+    };
+    axios
+      .get("https://newsapi.org/v2/everything?q=khamenei", config)
+      .then((response) => {
+        this.articles = response.data.articles;
+        console.log(response.data);
+      });
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
